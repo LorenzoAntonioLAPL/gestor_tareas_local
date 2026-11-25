@@ -72,12 +72,94 @@ class _TareasPageState extends State<TareasPage> {
     }
   }
 
-  void _editarTarea(Tarea tarea) {
-    _pendiente('Implementar edición de título');
+  Future<void> _editarTarea(Tarea tarea) async {
+    final controller = TextEditingController(text: tarea.titulo);
+
+    final nuevoTitulo = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Editar tarea'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(
+            labelText: 'Título de la tarea',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context, controller.text.trim());
+            },
+            child: const Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+
+    controller.dispose();
+
+    if (nuevoTitulo == null) return;
+
+    if (nuevoTitulo.isEmpty) {
+      _pendiente('El título no puede estar vacío');
+      return;
+    }
+
+    try {
+      await widget.database.actualizarTituloTarea(
+        tarea.id,
+        nuevoTitulo,
+      );
+
+      if (!mounted) return;
+
+      _pendiente('Tarea actualizada correctamente');
+    } catch (e) {
+      if (!mounted) return;
+
+      _pendiente('Error al actualizar la tarea');
+    }
   }
 
-  void _eliminarTarea(Tarea tarea) {
-    _pendiente('Implementar eliminación de tarea');
+  Future<void> _eliminarTarea(Tarea tarea) async {
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Eliminar tarea'),
+        content: Text(
+          '¿Estás seguro de que deseas eliminar "${tarea.titulo}"?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar != true) return;
+
+    try {
+      await widget.database.eliminarTarea(tarea.id);
+
+      if (!mounted) return;
+
+      _pendiente('Tarea eliminada correctamente');
+    } catch (e) {
+      if (!mounted) return;
+
+      _pendiente('Error al eliminar la tarea');
+    }
   }
 
   void _pendiente(String mensaje) {

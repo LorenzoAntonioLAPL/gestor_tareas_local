@@ -40,6 +40,20 @@ class AppDatabase extends _$AppDatabase {
       ),
     );
   }
+  Future<int> actualizarTituloTarea(
+    int id,
+    String nuevoTitulo,
+  ) {
+    return (update(tareas)..where((t) => t.id.equals(id))).write(
+      TareasCompanion(
+        titulo: Value(nuevoTitulo),
+      ),
+    );
+  }
+
+  Future<int> eliminarTarea(int id) {
+    return (delete(tareas)..where((t) => t.id.equals(id))).go();
+  }
 }
 
 QueryExecutor _openConnection() {
