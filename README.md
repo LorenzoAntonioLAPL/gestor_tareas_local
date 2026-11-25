@@ -1,54 +1,60 @@
-# Gestor de tareas SQLite multiplataforma
+# Gestor de tareas con SQLite
 
-Aplicación desarrollada en Flutter para administrar tareas mediante almacenamiento local SQLite. El proyecto busca funcionar en Android, iOS, Windows, Linux, macOS y Web.
+Aplicación multiplataforma desarrollada con Flutter que permite gestionar tareas mediante almacenamiento local persistente con SQLite y Drift.
+
+## Funcionalidades
+
+- Crear tareas.
+- Consultar tareas registradas.
+- Editar títulos.
+- Marcar tareas como completadas o pendientes.
+- Eliminar tareas.
+- Validar títulos vacíos.
+- Conservar los datos al cerrar y volver a abrir la aplicación.
 
 ## Tecnologías
 
-- Flutter
-- Dart
+- Flutter y Dart
 - SQLite
 - Drift
 - drift_flutter
 
-Se utilizará Drift como ORM para trabajar con SQLite desde Dart, y drift_flutter para facilitar la configuración de la base de datos en Flutter. La finalidad es utilizar una misma implementación de persistencia en las diferentes plataformas.
+La base de datos utiliza una tabla `Tareas` con los campos `id` (autoincremental), `titulo` y `completada`. La persistencia se administra mediante `AppDatabase`.
 
-## Diseño de la base de datos
+## Instalación y ejecución
 
-Se utilizará una tabla llamada `Tareas` con los siguientes campos:
+Requisitos: Flutter SDK y Git instalados.
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| id | INTEGER | Identificador único autoincremental |
-| titulo | TEXT | Nombre de la tarea |
-| completada | BOOLEAN | Indica si la tarea está completada |
+Clonar el repositorio:
 
-El identificador permitirá realizar modificaciones y eliminaciones sobre una tarea específica.
+```bash
+git clone https://github.com/LorenzoAntonioLAPL/gestor_tareas_local.git
+cd gestor_tareas_local
+```
 
-## Funcionalidades
+Instalar dependencias:
 
-- Agregar tareas.
-- Consultar tareas guardadas.
-- Editar títulos.
-- Marcar tareas como completadas o pendientes.
-- Eliminar tareas.
-- Conservar la información después de cerrar y abrir la aplicación.
+```bash
+flutter pub get
+```
 
-## Desarrollo
+Ejecutar en Windows:
 
-El proyecto se desarrollará por etapas:
+```bash
+flutter run -d windows
+```
 
-1. Preparación del proyecto y diseño de persistencia.
-2. Implementación de SQLite y operaciones de alta y consulta.
-3. Implementación de edición, cambio de estado y eliminación.
-4. Compatibilidad multiplataforma y pruebas.
+Ejecutar en Web (Chrome):
 
-## Estado actual
+```bash
+flutter run -d chrome
+```
 
-- [x] Proyecto Flutter creado.
-- [x] Interfaz inicial incorporada.
-- [x] Dependencias iniciales instaladas.
-- [x] Prueba inicial ejecutada correctamente.
-- [ ] Configuración de Drift.
-- [ ] Implementación de persistencia.
-- [ ] CRUD completo.
-- [ ] Pruebas de persistencia y multiplataforma.
+## Verificación
+
+```bash
+flutter analyze
+flutter test
+```
+
+El proyecto fue probado en Windows y Web (Chrome). Las pruebas automatizadas y las pruebas manuales de persistencia se documentan en el reporte de la práctica.
